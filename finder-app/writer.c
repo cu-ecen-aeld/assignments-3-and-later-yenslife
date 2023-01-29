@@ -14,11 +14,15 @@
 // for read() and write(2)
 #include <unistd.h>
 
+// for error handling
+#include<errno.h>
+
 void my_write(const char* writefile, char* writestr){
 	// set file descriptor
 	int fd = open( writefile, O_WRONLY | O_CREAT, 0777);
 	if (fd < 0) {
 		perror("open() error");
+		syslog(LOG_ERR, "open() error: %s", strerror(errno));
 		return;
 	}
 	write(fd, writestr, strlen(writestr));
