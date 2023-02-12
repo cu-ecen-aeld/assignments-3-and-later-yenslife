@@ -46,6 +46,7 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
 fi
 
 echo "Adding the Image in outdir"
+cp ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ${OUTDIR}
 
 echo "Creating the staging directory for the root filesystem"
 cd "$OUTDIR"
@@ -79,23 +80,20 @@ git clone git://busybox.net/busybox.git
     echo "Configure busybox" 
     make distclean
     make defconfig
-    
     ##########_my_code_#######
 else
     cd busybox
 fi
 
 # TODO: Make and install busybox
-
-pwd
 echo "Make and install busybox"
 #make -p
-#make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}                                                                                                  │
-#make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install
-
+#make --trace
+make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
+make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install
 ###############_my_code_########
-
 echo "Library dependencies"
+cd ${OUTDIR}/rootfs
 ${CROSS_COMPILE}readelf -a bin/busybox | grep "program interpreter"
 ${CROSS_COMPILE}readelf -a bin/busybox | grep "Shared library"
 
