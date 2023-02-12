@@ -58,6 +58,7 @@ fi
 # TODO: Create necessary base directories
 # create ${OUTDIR}/rootfs and the whole root file system
 
+echo "Create necessary base directories"
 mkdir -p ${OUTDIR}/rootfs 
 cd ${OUTDIR}/rootfs
 mkdir -p bin dev etc home lib lib64 proc sbin sys tmp usr var
@@ -75,6 +76,7 @@ git clone git://busybox.net/busybox.git
     git checkout ${BUSYBOX_VERSION}
     # TODO:  Configure busybox
     
+    echo "Configure busybox" 
     make distclean
     make defconfig
     
@@ -85,8 +87,11 @@ fi
 
 # TODO: Make and install busybox
 
-make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}                                                                                                  │
-make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install
+pwd
+echo "Make and install busybox"
+#make -p
+#make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}                                                                                                  │
+#make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install
 
 ###############_my_code_########
 
