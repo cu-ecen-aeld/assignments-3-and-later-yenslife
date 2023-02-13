@@ -5,7 +5,7 @@
 set -e
 set -u
 
-OUTDIR=/tmp/aeld
+OUTDIR=/media/yenslife/Linux2
 KERNEL_REPO=git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 KERNEL_VERSION=v5.1.10
 BUSYBOX_VERSION=1_33_1
@@ -39,8 +39,8 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} mrproper
     make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} defconfig
     make -j4 ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} all
-    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} modules
-    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} dtbs
+    #make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} modules
+    #make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} dtbs
     
     #################_my_code_##############
 fi
