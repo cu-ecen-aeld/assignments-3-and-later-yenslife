@@ -5,7 +5,7 @@
 set -e
 set -u
 
-OUTDIR=/media/yenslife/Linux2
+OUTDIR=/tmp/aeld
 KERNEL_REPO=git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 KERNEL_VERSION=v5.1.10
 BUSYBOX_VERSION=1_33_1
@@ -39,8 +39,8 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} mrproper
     make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} defconfig
     make -j4 ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} all
-    #make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} modules
-    #make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} dtbs
+    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} modules
+    make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} dtbs
     
     #################_my_code_##############
 fi
@@ -121,15 +121,18 @@ make CROSS_COMPILE=${CROSS_COMPILE} # cross compile the app
 cp finder-test.sh $OUTDIR/rootfs/home/
 cp finder.sh $OUTDIR/rootfs/home/
 cp writer $OUTDIR/rootfs/home/
+cp writer.c $OUTDIR/rootfs/home
 cp autorun-qemu.sh $OUTDIR/rootfs/home/
-cp -r ../conf ${OUTDIR}/rootfs/home/
+cp -r ../conf $OUTDIR/rootfs/home/
+cp -r ../conf/ $OUTDIR/rootfs/
 
 # TODO: Chown the root directory
-cd ${OUTDIR}/rootfs
+cd $OUTDIR/rootfs
 sudo chown -R root:root *
 
 # TODO: Create initramfs.cpio.gz
 find . | cpio -H newc -ov --owner root:root > ${OUTDIR}/initramfs.cpio
-cd ..
+cd $OUTDIR
 gzip -f initramfs.cpio
 
+echo "~~~~!!~~~ done ~~~!!~~~~~"
