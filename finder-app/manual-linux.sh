@@ -107,7 +107,8 @@ cp ${SYSROOT}/lib64/libresolv.so.2 lib64/
 cp ${SYSROOT}/lib64/libc.so.6 lib64/
 
 # TODO: Make device nodes
-echo "Make device nodes"
+cd ${OUTDIR}/rootfs
+echo "~~Make device nodes~~"
 sudo mknod -m 666 dev/null c 1 3
 sudo mknod -m 600 dev/console c 5 1
 
@@ -118,21 +119,25 @@ make CROSS_COMPILE=${CROSS_COMPILE} # cross compile the app
 
 # TODO: Copy the finder related scripts and executables to the /home directory
 # on the target rootfs
-cp finder-test.sh $OUTDIR/rootfs/home/
-cp finder.sh $OUTDIR/rootfs/home/
-cp writer $OUTDIR/rootfs/home/
-cp writer.c $OUTDIR/rootfs/home
-cp autorun-qemu.sh $OUTDIR/rootfs/home/
-cp -r ../conf $OUTDIR/rootfs/home/
-cp -r ../conf/ $OUTDIR/rootfs/
+cp ${FINDER_APP_DIR}/finder-test.sh $OUTDIR/rootfs/home/
+cp ${FINDER_APP_DIR}/finder.sh $OUTDIR/rootfs/home/
+cp ${FINDER_APP_DIR}/writer $OUTDIR/rootfs/home/
+cp ${FINDER_APP_DIR}/writer.c $OUTDIR/rootfs/home
+cp ${FINDER_APP_DIR}/autorun-qemu.sh $OUTDIR/rootfs/home/
+cp -r ${FINDER_APP_DIR}/conf $OUTDIR/rootfs/home/
+cp -r ${FINDER_APP_DIR}/conf/ $OUTDIR/rootfs/
 
+echo "!!done copy!!"
+
+echo "Chown the root directory"
 # TODO: Chown the root directory
 cd $OUTDIR/rootfs
 sudo chown -R root:root *
 
+echo "Create initramfs.cpio.gz"
 # TODO: Create initramfs.cpio.gz
 find . | cpio -H newc -ov --owner root:root > ${OUTDIR}/initramfs.cpio
-cd $OUTDIR
+cd ..
 gzip -f initramfs.cpio
 
 echo "~~~~!!~~~ done ~~~!!~~~~~"
